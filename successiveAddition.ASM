@@ -1,0 +1,34 @@
+;Multiply two 8 bit numbers using successive addition method
+
+INCLUDE IO.H
+ASSUME CS:CODE,DS:DATA
+
+DATA SEGMENT
+	ALERT DB 13,10,"Multiplication By Successive Addition : ",0
+	NUM1 DB 03H
+	NUM2 DB 05H
+	ANS DB 6 DUP(0)
+DATA ENDS
+
+CODE SEGMENT
+START:
+	MOV AX,DATA
+	MOV DS,AX
+	
+	MOV AX,0000H
+	MOV CX,0000H
+	MOV BL,NUM1
+	MOV CL,NUM2
+	
+POOL:
+	ADD AX,BX
+	LOOP POOL
+	
+	OUTPUT ALERT
+	ITOA ANS,AX
+	OUTPUT ANS
+	
+	MOV AH,4CH
+	INT 21H
+CODE ENDS
+END START

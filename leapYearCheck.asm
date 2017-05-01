@@ -1,0 +1,46 @@
+;Check if the entered year is a leap year or not
+INCLUDE IO.H
+ASSUME DS:DATA,CS:CODE
+DATA SEGMENT
+MSG DB 0AH,0DH,'Enter The Year $' ;0DH equivalent ot 13
+NUMBER DB 6,0,6 DUP('$');to take multiple number
+YS DB 0AH,0DH,'It is a leap year $'
+N DB 0AH,0DH,'Not a Leap Year $'
+DATA ENDS
+
+CODE SEGMENT
+START:
+	MOV AX,DATA
+	MOV DS,AX
+	LEA DX,MSG ;display message
+	MOV AH,09H
+	INT 21H
+
+	LEA DX,NUMBER
+	MOV AH,0AH; equivalent to 10
+	INT 21H
+
+	LEA BX,NUMBER+4; BEGINING 2 CHARACTERS ARE NULL(TOTAL 6 CHAR)
+	MOV AH,[BX]
+	AND AH,0FH
+	MOV AL,[BX+1]
+	AND AL,0FH
+	AAD	; ASCII adjust before division	
+
+	MOV BL,04H
+	DIV BL
+	CMP AH,00H
+	JZ YES
+	LEA DX,N
+	MOV AH,09H
+	INT 21H
+	JMP DOWN
+YES:
+	LEA DX,YS
+	MOV AH,09H
+	INT 21H
+DOWN:
+	MOV AH,4CH
+	INT 21H
+	CODE ENDS
+END START
